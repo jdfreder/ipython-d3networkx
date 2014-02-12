@@ -1,7 +1,7 @@
 IPython-d3
 ==========
 
-This directory contains example code and notebooks that show how D3.js can be used in combination with NetworkX and the widget framework to make some really cool, interactive, force directed graphs.
+This directory contains example code and notebooks that show how D3.js can be used in combination with NetworkX and the IPython notebook widget framework to make some really cool, interactive, force directed graphs.
 
 
 - `demo simple.ipynb`
