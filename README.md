@@ -1,4 +1,6 @@
-ipython-d3
+IPython-d3
 ==========
 
-D3 Widget examples
+This directory contains example code that shows how D3.js can be used in combination with NetworkX and the Widget framework to make some really cool, interactive, force directed graphs.
+
+
