@@ -251,21 +251,21 @@ require(["//cdnjs.cloudflare.com/ajax/libs/d3/3.4.1/d3.min.js", "notebook/js/wid
                     .links(this.links)
                     .charge(function (d) {
                         if (d.charge === undefined) {
-                            return -80;
+                            return -260;
                         } else {
                             return d.charge;
                         }
                     })
                     .linkDistance(function (d) {
                         if (d.distance === undefined) {
-                            return 90;
+                            return 30;
                         } else {
                             return d.distance;
                         }
                     })
                     .linkStrength(function (d) {
                         if (d.strength === undefined) {
-                            return 0.5;
+                            return 0.2;
                         } else {
                             return d.strength;
                         }
