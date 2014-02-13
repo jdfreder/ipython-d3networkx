@@ -305,21 +305,21 @@ require(["//cdnjs.cloudflare.com/ajax/libs/d3/3.4.1/d3.min.js", "notebook/js/wid
                     .links(this.links)
                     .charge(function (d) {
                         if (d.charge === undefined) {
-                            return that.model.get('charge') || -280;
+                            return -280;
                         } else {
                             return d.charge;
                         }
                     })
                     .linkDistance(function (d) {
                         if (d.distance === undefined) {
-                            return that.model.get('distance') || 30;
+                            return 30;
                         } else {
                             return d.distance;
                         }
                     })
                     .linkStrength(function (d) {
                         if (d.strength === undefined) {
-                            return that.model.get('strength') || 0.3;
+                            return 0.3;
                         } else {
                             return d.strength;
                         }
