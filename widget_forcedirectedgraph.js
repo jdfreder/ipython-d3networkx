@@ -144,16 +144,22 @@ require(["//cdnjs.cloudflare.com/ajax/libs/d3/3.4.1/d3.min.js", "notebook/js/wid
         },
         
         start: function() {
-            var node = this.svg.selectAll(".node"),
+            var node = this.svg.selectAll(".gnode"),
                 link = this.svg.selectAll(".link");
             
             var link = link.data(this.force.links(), function(d) { return d.source.id + "-" + d.target.id; });
-            this._update_edge(link.enter().insert("line", ".node"))
+            this._update_edge(link.enter().insert("line", ".gnode"))
             link.exit().remove();
             
             var node = node.data(this.force.nodes(), function(d) { return d.id;});
             var that = this;
-            this._update_node(node.enter().append("circle"));
+
+            var gnode = node.enter()
+                .append("g")
+                .attr('class', 'gnode')
+                .call(this.force.drag);
+            this._update_node(gnode.append("circle"));
+            this._update_text(gnode.append("text"));
             node.exit().remove();
             
             this.force.start();
@@ -161,6 +167,7 @@ require(["//cdnjs.cloudflare.com/ajax/libs/d3/3.4.1/d3.min.js", "notebook/js/wid
         
         _update_node: function(node) {
             var that = this;
+
             node
                 .attr("id", function(d) { return that.guid + d.id; })
                 .attr("class", function(d) { return "node " + d.id; })
@@ -196,7 +203,40 @@ require(["//cdnjs.cloudflare.com/ajax/libs/d3/3.4.1/d3.min.js", "notebook/js/wid
                     }
                     
                 })
-                .call(this.force.drag);
+                .attr('dx', 0)
+                .attr('dy', 0);
+        },
+        
+        _update_text: function(text) {
+            var that = this;
+
+            text
+                .attr("id", function(d) { return that.guid + d.id + 'text'; })
+                .text(function(d) { 
+                    if (d.label) {
+                        return  d.label;
+                    } else {
+                        return '';
+                    }
+                })
+                .style("font-size",function(d) { 
+                    if (d.font_size) {
+                        return  d.font_size;
+                    } else {
+                        return '11pt';
+                    }
+                })
+                .attr("text-anchor", "middle")
+                .style("fill", function(d) { 
+                    if (d.color) {
+                        return  d.color;
+                    } else {
+                        return 'white';
+                    }
+                })
+                .attr('dx', 0)
+                .attr('dy', 5)
+                .style("pointer-events", 'none');
         },
         
         _update_edge: function(edge) {
@@ -223,16 +263,16 @@ require(["//cdnjs.cloudflare.com/ajax/libs/d3/3.4.1/d3.min.js", "notebook/js/wid
         },
         
         tick: function() {
-            var node = this.svg.selectAll(".node"),
+            var gnode = this.svg.selectAll(".gnode"),
                 link = this.svg.selectAll(".link");
             
             link.attr("x1", function(d) { return d.source.x; })
                 .attr("y1", function(d) { return d.source.y; })
                 .attr("x2", function(d) { return d.target.x; })
                 .attr("y2", function(d) { return d.target.y; });
-        
-            node.attr("cx", function(d) { return d.x; })
-                .attr("cy", function(d) { return d.y; });
+
+            // Translate the groups
+            gnode.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });  
         },
         
         update: function(){
@@ -265,7 +305,7 @@ require(["//cdnjs.cloudflare.com/ajax/libs/d3/3.4.1/d3.min.js", "notebook/js/wid
                     })
                     .linkStrength(function (d) {
                         if (d.strength === undefined) {
-                            return 0.2;
+                            return 0.3;
                         } else {
                             return d.strength;
                         }
