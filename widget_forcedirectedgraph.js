@@ -33,7 +33,8 @@ require(["//cdnjs.cloudflare.com/ajax/libs/d3/3.4.1/d3.min.js", "notebook/js/wid
                 for (var key in attributes) {
                     node[key] = attributes[key];
                 }
-                this._update_node(d3.select('#' + this.guid + node.id));
+                this._update_circle(d3.select('#' + this.guid + node.id));
+                this._update_text(d3.select('#' + this.guid + node.id + '-text'));
             }
         },
                 
@@ -158,17 +159,17 @@ require(["//cdnjs.cloudflare.com/ajax/libs/d3/3.4.1/d3.min.js", "notebook/js/wid
                 .append("g")
                 .attr('class', 'gnode')
                 .call(this.force.drag);
-            this._update_node(gnode.append("circle"));
+            this._update_circle(gnode.append("circle"));
             this._update_text(gnode.append("text"));
             node.exit().remove();
             
             this.force.start();
         },
-        
-        _update_node: function(node) {
+
+        _update_circle: function(circle) {
             var that = this;
 
-            node
+            circle
                 .attr("id", function(d) { return that.guid + d.id; })
                 .attr("class", function(d) { return "node " + d.id; })
                 .attr("r", function(d) {
@@ -211,7 +212,7 @@ require(["//cdnjs.cloudflare.com/ajax/libs/d3/3.4.1/d3.min.js", "notebook/js/wid
             var that = this;
 
             text
-                .attr("id", function(d) { return that.guid + d.id + 'text'; })
+                .attr("id", function(d) { return that.guid + d.id + '-text'; })
                 .text(function(d) { 
                     if (d.label) {
                         return  d.label;
@@ -234,8 +235,20 @@ require(["//cdnjs.cloudflare.com/ajax/libs/d3/3.4.1/d3.min.js", "notebook/js/wid
                         return 'white';
                     }
                 })
-                .attr('dx', 0)
-                .attr('dy', 5)
+                .attr('dx', function(d) { 
+                    if (d.dx) {
+                        return  d.dx;
+                    } else {
+                        return 0;
+                    }
+                })
+                .attr('dy', function(d) { 
+                    if (d.dy) {
+                        return  d.dy;
+                    } else {
+                        return 5;
+                    }
+                })
                 .style("pointer-events", 'none');
         },
         
@@ -286,26 +299,27 @@ require(["//cdnjs.cloudflare.com/ajax/libs/d3/3.4.1/d3.min.js", "notebook/js/wid
                 this.nodes = [];
                 this.links = [];
                 
+                var that = this;
                 this.force = d3.layout.force()
                     .nodes(this.nodes)
                     .links(this.links)
                     .charge(function (d) {
                         if (d.charge === undefined) {
-                            return -260;
+                            return that.model.get('charge') || -280;
                         } else {
                             return d.charge;
                         }
                     })
                     .linkDistance(function (d) {
                         if (d.distance === undefined) {
-                            return 30;
+                            return that.model.get('distance') || 30;
                         } else {
                             return d.distance;
                         }
                     })
                     .linkStrength(function (d) {
                         if (d.strength === undefined) {
-                            return 0.3;
+                            return that.model.get('strength') || 0.3;
                         } else {
                             return d.strength;
                         }
@@ -316,13 +330,12 @@ require(["//cdnjs.cloudflare.com/ajax/libs/d3/3.4.1/d3.min.js", "notebook/js/wid
                 this.svg = d3.select("#" + this.guid).append("svg")
                     .attr("width", width)
                     .attr("height", height);
-                
-                var that = this;
-                setTimeout(function() {
-                    that.start();
-                }, 0);
             }
-            
+
+            var that = this;
+            setTimeout(function() {
+                that.start();
+            }, 0);
             return D3ForceDirectedGraphView.__super__.update.apply(this);
         },
         
