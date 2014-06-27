@@ -1,4 +1,4 @@
-require(["//cdnjs.cloudflare.com/ajax/libs/d3/3.4.1/d3.min.js", "notebook/js/widgetmanager"], function(d3, WidgetManager){
+require(["//cdnjs.cloudflare.com/ajax/libs/d3/3.4.1/d3.min.js", "widgets/js/manager"], function(d3, WidgetManager){
 
     // Define the D3ForceDirectedGraphView
     var D3ForceDirectedGraphView = IPython.DOMWidgetView.extend({
