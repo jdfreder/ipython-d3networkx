@@ -1,4 +1,7 @@
-require(["//cdnjs.cloudflare.com/ajax/libs/d3/3.4.1/d3.min.js", "base/js/utils", "widgets/js/manager", "widgets/js/widget"], function(d3, utils, manager, widget){
+define(function(require) {
+    var d3 = require('https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.1/d3.min.js');
+    var utils = require('base/js/utils');
+    var widget = require('widgets/js/widget');
 
     // Define the D3ForceDirectedGraphView
     var D3ForceDirectedGraphView = widget.DOMWidgetView.extend({
@@ -415,7 +418,8 @@ require(["//cdnjs.cloudflare.com/ajax/libs/d3/3.4.1/d3.min.js", "base/js/utils",
         },
         
     });
-        
-    // Register the D3ForceDirectedGraphView with the widget manager.
-    manager.WidgetManager.register_widget_view('D3ForceDirectedGraphView', D3ForceDirectedGraphView);
+
+    return {
+        D3ForceDirectedGraphView: D3ForceDirectedGraphView
+    };  
 });
