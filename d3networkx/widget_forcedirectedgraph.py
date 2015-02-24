@@ -1,14 +1,9 @@
 from IPython.html import widgets # Widget definitions
 from IPython.utils.traitlets import Unicode, CInt, CFloat # Import the base Widget class and the traitlets Unicode class.
-from IPython.display import display, Javascript
 
-def publish_js():
-    with open('./widget_forcedirectedgraph.js', 'r') as f:
-        display(Javascript(data=f.read()))
-
-
-# Define our ForceDirectedGraphWidget and its target model and default view.
-class ForceDirectedGraphWidget(widgets.DOMWidget):
+# Define our ForceDirectedGraph and its target model and default view.
+class ForceDirectedGraph(widgets.DOMWidget):
+    _view_module = Unicode('nbextensions/d3networkx/widget', sync=True)
     _view_name = Unicode('D3ForceDirectedGraphView', sync=True)
     
     width = CInt(400, sync=True)
