@@ -4,7 +4,8 @@ from setuptools import setup
 try:
     from ipythonpip import cmdclass
 except:
-    cmdclass = lambda *args: None
+    import pip, importlib
+    pip.main(['install', 'ipython-pip']); cmdclass = importlib.import_module('ipythonpip').cmdclass
 
 setup(
     name='d3networkx',
